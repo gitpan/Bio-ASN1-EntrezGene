@@ -1,0 +1,27 @@
+This is the README file for Bio::ASN1::EntrezGene, an XML parser-like
+parser for the ASN.1-formatted NCBI Entrez Gene files.  Written and 
+maintained by Dr. Mingyi Liu <mingyi.liu@gpc-biotech.com>.
+
+Copyright (c) 2005 Mingyi Liu, GPC Biotech, Altana Research Institute.
+All rights reserved.
+This program is free software - you can redistribute it and/or modify 
+it under the same terms as Perl itself.
+
+INSTALLATION
+
+Bio::ASN1::EntrezGene can be installed as follows:
+
+perl Makefile.PL
+make
+make install
+
+Or if you prefer, just put EntrezGene.pm to the correct path like /MYPERLLIB/Bio/
+ASN1.  That'd work.
+
+DOCUMENTATION
+
+For documentation, among many other things, please refer to the POD (
+plain old documentation) inside the module.
+
+Note that the regex_parser_test and parse_entrez_gene_example are two example
+scripts included.  It is highly recommended that you check these scripts out!

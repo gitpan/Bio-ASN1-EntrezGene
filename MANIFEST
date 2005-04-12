@@ -1,0 +1,7 @@
+Changes
+MANIFEST
+README
+lib/Bio/ASN1/EntrezGene.pm
+Makefile.PL
+regex_parser_test
+parse_entrez_gene_example
