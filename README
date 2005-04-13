@@ -16,7 +16,7 @@ make
 make install
 
 Or if you prefer, just put EntrezGene.pm to the correct path like /MYPERLLIB/Bio/
-ASN1.  That'd work.
+ASN1 (replace 'MYPERLLIB' to the perl lib path on your system).  That'd work.
 
 DOCUMENTATION
 
