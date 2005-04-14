@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
-# launch it like "perl regex_parser_test Homo_sapiens" (Homo_sapiens can be downloaded
+# launch it like "perl regex_parser_test.pl Homo_sapiens" (Homo_sapiens can be downloaded
 # and decompressed from ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/ASN/Mammalia/Homo_sapiens.gz)
+# or use the included test file "perl regex_parser_test.pl ../t/input.asn"
 
 use strict;
 use Dumpvalue;

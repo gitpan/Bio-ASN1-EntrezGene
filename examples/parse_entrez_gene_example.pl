@@ -1,9 +1,13 @@
 #!/usr/bin/perl
 
+# launch it like "perl parse_entrez_gene_example.pl Homo_sapiens" (Homo_sapiens can be downloaded
+# and decompressed from ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/ASN/Mammalia/Homo_sapiens.gz)
+# or use the included test file "perl parse_entrez_gene_example.pl ../t/input.asn"
+
 ################################################################################
 # parse_entrez_gene_example
 # Purpose: Demonstrates how to use Mingyi's Entrez Gene parser and retrieve
-#          each data item from Entrez Gene.  This data extraction demo is 
+#          each data item from Entrez Gene.  This data extraction demo is
 #           very important as I spent 3-4 times more time on this script
 #           than on writing, debugging, profiling, optimizing my parser!
 #           It's a tedious task and I hope this script helps you (I'm sure
@@ -19,7 +23,7 @@ use Dumpvalue;
 use Benchmark;
 use Bio::ASN1::EntrezGene;
 
-my $parser = Bio::ASN1::EntrezGene->new('file' => "Homo_sapiens");
+my $parser = Bio::ASN1::EntrezGene->new('file' => $ARGV[0]);
 my $i = 0;
 while(my $result = $parser->next_seq)
 {

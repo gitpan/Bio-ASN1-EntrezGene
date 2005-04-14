@@ -11,6 +11,19 @@ Bio::ASN1::EntrezGene - Regular expression-based Perl Parser for NCBI Entrez Gen
   {
     # extract data from $result, or Dumpvalue->new->dumpValue($result);
   }
+  
+  # a new way to get the $result data hash for a particular gene id:
+  use Bio::ASN1::EntrezGene::Indexer;
+  my $inx = Bio::ASN1::EntrezGene::Indexer->new(-filename => 'entrezgene.idx');
+  my $seq = $inx->fetch_hash(10); # returns $result for Entrez Gene record
+                                  # with geneid 10
+  # note that the index file 'entrezgene.idx' can be created as follows
+  my $inx = Bio::ASN1::EntrezGene::Indexer->new(
+    -filename => 'entrezgene.idx',
+    -write_flag => 'WRITE');
+  $inx->make_index('Homo_sapiens', 'Mus_musculus'); # files come from NCBI download
+
+  # for more detail please refer to Bio::ASN1::EntrezGene::Indexer perldoc
 
 =head1 PREREQUISITE
 
@@ -18,7 +31,7 @@ None.
 
 =head1 INSTALLATION
 
-Bio::ASN1::EntrezGene can be installed as follows:
+Bio::ASN1::EntrezGene package can be installed as follows:
 
 perl Makefile.PL
 make
@@ -34,18 +47,24 @@ Gene genome databases ( http://www.ncbi.nih.gov/entrez/query.fcgi?db=gene ).  It
 parses an ASN.1-formatted Entrez Gene record and returns a data structure that
 contains all data items from the gene record.
 
-The parser will report error & line number if input data does not conform to the 
+The parser will report error & line number if input data does not conform to the
 NCBI Entrez Gene genome annotation file format.
 
-It took the parser version 1.0 11 minutes to parse the human genome Entrez Gene 
-file on one 2.4 GHz Intel Xeon processor.  The addition of validation and error 
-reporting in 1.03 and handling of new Entrez Gene format slowed the parser down 
+It took the parser version 1.0 11 minutes to parse the human genome Entrez Gene
+file on one 2.4 GHz Intel Xeon processor.  The addition of validation and error
+reporting in 1.03 and handling of new Entrez Gene format slowed the parser down
 about 40%.
+
+Since V1.07, this package also included an indexer that runs pretty fast (it 
+takes 21 seconds for the indexer to index the human genome on the same 
+processor).  Therefore the combination of the modules would allow user to 
+retrieve and parse arbitrary records.
 
 =head1 SEE ALSO
 
-The parse_entrez_gene_example script included in this package is a very 
-important and near-complete demo on using this module to extract all data 
+The parse_entrez_gene_example.pl script included in this package (please 
+see the Bio-ASN1-EntrezGene-x.xx/examples directory) is a very
+important and near-complete demo on using this module to extract all data
 items from Entrez Gene records.  Do check it out because in fact, this 
 script took me about 3-4 times more time to make for my project than the 
 parser V1.0 itself. Note that the example script was edited to leave
@@ -85,18 +104,22 @@ use strict;
 use Carp qw(carp croak);
 use vars qw ($VERSION);
 
-$VERSION = '1.06';
+$VERSION = '1.07';
 
 =head2 new
 
   Parameters: maxerrstr => 20 (optional) - maximum number of characters after
                 offending element, used by error reporting, default is 20
-              file => $filename (optional) - name of the file to be parsed.
-                call next_seq to parse!
+              file or -file => $filename (optional) - name of the file to be 
+                parsed. call next_seq to parse!
+              fh or -fh => $filehandle (optional) - handle of the file to be 
+                parsed. 
   Example:    my $parser = Bio::ASN1::EntrezGene->new();
   Function:   Instantiate a parser object
   Returns:    Object reference
-  Notes:
+  Notes:      Setting file or fh will reset line numbers etc. that are used
+                for error reporting purposes, and seeking on file handle would 
+                mess up linenumbers!
 
 =cut
 
@@ -106,7 +129,8 @@ sub new
   $class = ref($class) if(ref($class));
   my $self = { maxerrstr => 20, @_ };
   bless $self, $class;
-  $self->input_file($self->{file}) if($self->{file});
+  map { $self->input_file($self->{$_}) if($self->{$_}) } qw(file -file);
+  map { $self->fh($self->{$_}) if($self->{$_}) } qw(fh -fh);
   return $self;
 }
 
@@ -157,7 +181,7 @@ sub parse
   my ($self, $input, $compact, $noreset) = @_;
   $input || croak "must have input!\n";
   $self->{input} = $input;
-  $self->{filename} = "input string" unless $self->{filename};
+  $self->{filename} = "input" unless $self->{filename};
   $self->{linenumber} = 1 unless $self->{linenumber} && $noreset;
   $self->{depth} = 0;
   my $result;
@@ -202,6 +226,7 @@ sub input_file
   ($! =~ /too large/i && open($self->{fh}, "cat $filename |")) ||
     croak "can't open $filename! -- $!\n";
   $self->{filename} = $filename;
+  $self->{linenumber} = 0; # reset line number
 }
 
 =head2 next_seq
@@ -229,9 +254,9 @@ sub input_file
 sub next_seq
 {
   my ($self, $compact) = @_;
+  $self->{fh} || croak "you must pass in a file name or handle through new() or input_file() first before calling next_seq!\n";
   local $/ = "Entrezgene ::= {"; # set record separator
-  $self->{fh} || croak "you must pass in a file name through new() or input_file() first before calling next_seq!\n";
-  if($_ = readline $self->{fh})
+  while($_ = readline($self->{fh}))
   {
     chomp;
     next unless /\S/;
@@ -411,8 +436,8 @@ sub _parse
 sub trimdata
 {
   my ($ref, $flag) = @_;
-  return if $flag == 3 || !ref($ref);
   $flag = 2 unless $flag;
+  return if $flag == 3 || !ref($ref);
   if(ref($ref) ne 'ARRAY') # allows for object refs
   {
     my @keys;
@@ -446,6 +471,48 @@ sub trimdata
       trimdata($item, $flag) if(ref($item))
     }
   }
+}
+
+=head2 fh
+
+  Parameters: $filehandle (optional)
+  Example:    trimdata($datahash); # using the default flag
+  Function:   getter/setter for file handle
+  Returns:    file handle for current file being parsed.
+  Notes:      Use with care!
+              Line number report would not be corresponding to file's line 
+                number if seek operation is performed on the file handle!
+
+=cut
+
+sub fh
+{
+  my ($self, $filehandle) = @_;
+  if($filehandle)
+  {
+    $self->{fh} = $filehandle;
+    $self->{linenumber} = 0; # reset line number
+  }
+  return $self->{fh};
+}
+
+=head2 rawdata
+
+  Parameters: none
+  Example:    my $data = $parser->rawdata();
+  Function:   Get the entrez gene data file that was just parsed
+  Returns:    a string containing the ASN1-formatted Entrez Gene record
+  Notes:      Must first parse a record then call this function!
+              Could be useful in interpreting line number value in error
+                report (if user did a seek on file handle right before parsing 
+                call)
+
+=cut
+
+sub rawdata
+{
+  my $self = shift;
+  return "Entrezgene ::= $self->{input}";
 }
 
 1;

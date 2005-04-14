@@ -1,9 +1,17 @@
+version 1.07: Added indexing capability through a new module
+              Added testing script for make test
+              Added example script for indexing, reorganized examples scripts
+              Fixed a bug in next_seq
+              Reset line number after input_file() or fh() calls
+              Added rawdata(), fh() functions and -file, -fh, fh to new()
+              Updated documentation to reflect all changes
+
 version 1.06: integrated code from Util.pm into EntrezGene.pm.
               changed packaging to Perl standard
               changed next_seq() default option to 2, so now the call
                 $parser->next_seq() is equivalent to the call
                 $parser->next_seq(2) in version 1.05
-              updated documentation to reflect all changes  
+              updated documentation to reflect all changes
 
 version 1.05: added support to parse the NCBI 4/5/2005 download, which
               inexplicably added a useless space before ',' on all lines, broke

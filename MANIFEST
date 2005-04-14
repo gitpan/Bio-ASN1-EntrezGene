@@ -2,6 +2,11 @@ Changes
 MANIFEST
 README
 lib/Bio/ASN1/EntrezGene.pm
+lib/Bio/ASN1/EntrezGene/Indexer.pm
 Makefile.PL
-regex_parser_test
-parse_entrez_gene_example
+examples/regex_parser_test.pl
+examples/indexer_test.pl
+examples/parse_entrez_gene_example.pl
+t/input.asn
+t/input1.asn
+t/testall.t
