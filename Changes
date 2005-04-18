@@ -1,3 +1,7 @@
+version 1.08: Split test script into two for better testing
+              Minor change in documentation and test scripts
+              NO change in parser/indexer code!
+
 version 1.07: Added indexing capability through a new module
               Added testing script for make test
               Added example script for indexing, reorganized examples scripts

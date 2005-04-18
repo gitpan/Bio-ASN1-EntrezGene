@@ -31,19 +31,17 @@ None.
 
 =head1 INSTALLATION
 
-Bio::ASN1::EntrezGene package can be installed as follows:
+Bio::ASN1::EntrezGene package can be installed & tested as follows:
 
-perl Makefile.PL
-make
-make install
-
-Or if you prefer, just put EntrezGene.pm to the correct path like /MYPERLLIB/Bio/
-ASN1.  That'd work.
+  perl Makefile.PL
+  make
+  make test
+  make install
 
 =head1 DESCRIPTION
 
 Bio::ASN1::EntrezGene is a regular expression-based Perl Parser for NCBI Entrez
-Gene genome databases ( http://www.ncbi.nih.gov/entrez/query.fcgi?db=gene ).  It
+Gene genome databases (L<http://www.ncbi.nih.gov/entrez/query.fcgi?db=gene>).  It
 parses an ASN.1-formatted Entrez Gene record and returns a data structure that
 contains all data items from the gene record.
 
@@ -71,7 +69,7 @@ parser V1.0 itself. Note that the example script was edited to leave
 out stuff specific to my internal project.
 
 For details on various parsers I generated for Entrez Gene, example scripts that 
-uses/benchmarks the modules, please see http://sourceforge.net/projects/egparser/.
+uses/benchmarks the modules, please see L<http://sourceforge.net/projects/egparser/>.
 Those other parsers etc. are included in V1.05 download.
 
 =head1 AUTHOR
@@ -88,7 +86,7 @@ special thanks for the two companies to allow the release of the code
 into public domain.
 
 You may use and distribute them under the terms of the Perl itself or
-GPL ( http://www.gnu.org/copyleft/gpl.html ).
+GPL (L<http://www.gnu.org/copyleft/gpl.html>).
 
 =head1 OPERATION SYSTEMS SUPPORTED
 

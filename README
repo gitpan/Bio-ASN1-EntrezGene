@@ -11,10 +11,11 @@ it under the same terms as Perl itself.
 
 INSTALLATION
 
-Bio::ASN1::EntrezGene package can be installed as follows:
+Bio::ASN1::EntrezGene package can be installed & tested as follows:
 
 perl Makefile.PL
 make
+make test
 make install
 
 DOCUMENTATION

@@ -9,4 +9,6 @@ examples/indexer_test.pl
 examples/parse_entrez_gene_example.pl
 t/input.asn
 t/input1.asn
-t/testall.t
+t/testparser.t
+t/testindexer.t
+

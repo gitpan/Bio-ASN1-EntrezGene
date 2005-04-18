@@ -46,7 +46,7 @@ Entrez Gene file (Apr. 5/2005 download) on one 2.4 GHz Intel Xeon processor.
 =head1 SEE ALSO
 
 For details on various parsers I generated for Entrez Gene, example scripts that
-uses/benchmarks the modules, please see http://sourceforge.net/projects/egparser/.
+uses/benchmarks the modules, please see L<http://sourceforge.net/projects/egparser/>.
 Those other parsers etc. are included in V1.05 download.
 
 =head1 AUTHOR
@@ -63,7 +63,7 @@ special thanks for the two companies to allow the release of the code
 into public domain.
 
 You may use and distribute them under the terms of the Perl itself or
-GPL ( http://www.gnu.org/copyleft/gpl.html ).
+GPL (L<http://www.gnu.org/copyleft/gpl.html>).
 
 =head1 OPERATION SYSTEMS SUPPORTED
 
