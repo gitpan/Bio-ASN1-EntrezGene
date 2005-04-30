@@ -1,3 +1,14 @@
+version 1.09: Added parser/indexer for NCBI's ASN.1-formatted
+                sequence files (like Genbank records).
+              Updated test, example scripts and documentation
+              Minor fix on parse_entrez_gene_example.pl
+              Added code to deal with CCDS xref and Hugo symbol (under
+                gene properties! unlike before) in parse_entrez_gene_example.pl
+              Updated parser & indexer file handle code to work with perl version 
+                5.005_03 (previous code since 1.07 only works with 5.6 or higher).
+              Commented out count_records call in testindex.t to allow successful
+                test on 5.005_03-compatible bioperl versions.
+
 version 1.08: Split test script into two for better testing
               Minor change in documentation and test scripts
               NO change in parser/indexer code!

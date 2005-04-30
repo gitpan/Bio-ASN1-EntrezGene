@@ -12,10 +12,17 @@
 #           than on writing, debugging, profiling, optimizing my parser!
 #           It's a tedious task and I hope this script helps you (I'm sure
 #           it will, if you use my parser).
-# Note:     If NCBI changes data definition, my parser probably doesn't need
-#           modification, but this script will need to (and will) be modified.
+# NOTE!!! This example script shows where each data item from Entrez Gene
+#         is in the data structure, but it does not store much data at all!
+#         Therefore you will find little data in the dumpValue($gene) gene call
+#         That's because data storage is project specific.  Please store
+#         the extracted data items in your script according to your own plan.
+#
+#         Although the author tries to show how to get all data out of Entrez Gene,
+#         there is no guarantee that all data from all versions of Entrez Gene will
+#         be extracted using this script.
 # Copyright: (c) 2005, Mingyi Liu, GPC Biotech, Altana Research Institute.
-# License: this code is licensed under GPL (http://www.gnu.org/copyleft/gpl.html).
+# License: this code is licensed under Perl itself or GPL.
 ################################################################################
 
 use strict;
@@ -33,8 +40,9 @@ while(my $result = $parser->next_seq)
     next;
   }
   $result = $result->[0] if(ref($result) eq 'ARRAY'); # this should always be true
+  Dumpvalue->new->dumpValue($result); # $result contains all Entrez Gene data
   my $gene = makegene($result);
-  Dumpvalue->new->dumpValue($gene); # very few items are stored after editing out project-specific stuff, user should decide about the storage themselves
+  Dumpvalue->new->dumpValue($gene); # although data are extracted, very few are stored (and thus dumped) after I edited out project-specific stuff, user should decide about the storage themselves
   last;
 }
 
@@ -46,17 +54,18 @@ while(my $result = $parser->next_seq)
 sub makegene
 {
   my $seq = shift;
+#   Dumpvalue->new->dumpValue($seq);exit;
   my $geneid = safeval($seq, '{track-info}->[0]->{geneid}');
   die "no geneid found!\n" unless $geneid; # this never happens, but doesn't hurt
   my (%protaccs, %protgis);
-  my $llgene;
+  my $llgene = {};
 
   ###################################################################################
   # it is difficult to process Entrez Gene in event-triggered functions, so
   # we'll just process items one by one to pick & choose the ones we want
   safeassign($llgene, 'description', $seq, '{gene}->[0]->{desc}');
   safeassign($llgene, 'type', $seq, '{type}');
-  safeassign($llgene, 'symbol', $seq, '{gene}->[0]->{locus}');
+  safeassign($llgene, 'symbol', $seq, '{gene}->[0]->{locus}'); # may be overwritten
   map { push(@{$llgene->{genenames}}, $_) } @{$seq->{gene}->[0]->{syn}} if(safeval($seq, '{gene}->[0]->{syn}'));
   $llgene->{summary} = $seq->{summary} if($seq->{summary});
   $llgene->{chromosome} = $seq->{source}->[0]->{subtype}->[0]->{name} if(safeval($seq, '{source}->[0]->{subtype}->[0]->{subtype}') eq 'chromosome');
@@ -177,6 +186,10 @@ sub makegene
                     push(@domains, $dom);
                   }
                   $prot->{dom} = \@domains;
+                }
+                elsif($c1->{heading} =~ /\(CCDS\)/) # CCDS database xref
+                {
+                  $prot->{ccds} = safeval($c1, '{source}->[0]->{src}->[0]->{tag}->[0]->{str}');
                 }
               }
             }
@@ -344,6 +357,20 @@ sub makegene
           }
         }
       }
+      elsif($p->{label} eq 'Nomenclature')
+      {
+        foreach my $p1 (@{$p->{properties}})
+        {
+          if($p1->{label} eq 'Official Symbol')
+          {
+            my $hugosymbol = $p1->{text};
+          }
+          elsif($p1->{label} eq 'Official Full Name')
+          {
+            my $hugoname = $p1->{text};
+          }
+        }
+      }
     }
   }
   ##################################
@@ -486,7 +513,8 @@ sub makegene
         foreach my $pacc (keys %{$t->{protein}})
         {
           my $p = $t->{protein}->{$pacc};
-          my $dealwithprotxref if($p->{acc}); # db should be refseq
+          my $deal_with_prot_xref if($p->{acc}); # db should be refseq
+          my $add_ccds_xref if($p->{ccds}); # db should be CCDS
           my $protname = $p->{name} if($p->{name});
           if($p->{from} || $p->{to}) # sometimes Entrez Gene forgets to annotate CDS start/end like for gene 574, NP_001178
           {

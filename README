@@ -1,12 +1,19 @@
 This is the README file for Bio::ASN1::EntrezGene package, which
-includes an XML parser-like parser for the ASN.1-formatted NCBI Entrez 
-Gene files.  It also includes an indexer for Entrez Gene as well.  Both
-modules have high performance.  
-Written and maintained by Dr. Mingyi Liu <mingyi.liu@gpc-biotech.com>.
+includes:
+1. XML parser-like parser for the ASN.1-formatted NCBI Entrez Gene files.
+2. Indexer for Entrez Gene files.
+3. XML parser-like parser for the ASN.1-formatted NCBI Sequence files.
+4. Indexer for Sequence files.
 
+These modules have quite high performance and error reporting capabilities.
+Additionally, one could dump the data structure generated from extracted
+NCBI object records into XML extremely easily using XML::Simple's XMLout().
+
+Written and maintained by Dr. Mingyi Liu <mingyi.liu@gpc-biotech.com>.
 Copyright (c) 2005 Mingyi Liu, GPC Biotech, Altana Research Institute.
 All rights reserved.
-This program is free software - you can redistribute it and/or modify 
+
+This program is free software - you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 INSTALLATION

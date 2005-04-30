@@ -1,29 +1,24 @@
 =head1 NAME
 
-Bio::ASN1::EntrezGene - Regular expression-based Perl Parser for NCBI Entrez Gene.
+Bio::ASN1::Sequence - Regular expression-based Perl Parser for ASN.1-formatted NCBI Sequences.
 
 =head1 SYNOPSIS
 
-  use Bio::ASN1::EntrezGene;
+  use Bio::ASN1::Sequence;
 
-  my $parser = Bio::ASN1::EntrezGene->new('file' => "Homo_sapiens");
+  my $parser = Bio::ASN1::Sequence->new('file' => "downloaded.asn1");
   while(my $result = $parser->next_seq)
   {
     # extract data from $result, or Dumpvalue->new->dumpValue($result);
   }
-  
-  # a new way to get the $result data hash for a particular gene id:
-  use Bio::ASN1::EntrezGene::Indexer;
-  my $inx = Bio::ASN1::EntrezGene::Indexer->new(-filename => 'entrezgene.idx');
-  my $seq = $inx->fetch_hash(10); # returns $result for Entrez Gene record
-                                  # with geneid 10
-  # note that the index file 'entrezgene.idx' can be created as follows
-  my $inx = Bio::ASN1::EntrezGene::Indexer->new(
-    -filename => 'entrezgene.idx',
-    -write_flag => 'WRITE');
-  $inx->make_index('Homo_sapiens', 'Mus_musculus'); # files come from NCBI download
 
-  # for more detail please refer to Bio::ASN1::EntrezGene::Indexer perldoc
+  # a new way to get the $result data hash for a particular sequence id:
+  use Bio::ASN1::Sequence::Indexer;
+  my $inx = Bio::ASN1::Sequence::Indexer->new(-filename => 'seq.idx');
+  my $seq = $inx->fetch_hash('AF093062');
+
+  # for creation of .idx index files please refer to
+  # Bio::ASN1::Sequence::Indexer perldoc
 
 =head1 PREREQUISITE
 
@@ -31,6 +26,7 @@ None.
 
 =head1 INSTALLATION
 
+Bio::ASN1::Sequence is part of the Bio::ASN1::EntrezGene package.
 Bio::ASN1::EntrezGene package can be installed & tested as follows:
 
   perl Makefile.PL
@@ -40,42 +36,32 @@ Bio::ASN1::EntrezGene package can be installed & tested as follows:
 
 =head1 DESCRIPTION
 
-Bio::ASN1::EntrezGene is a regular expression-based Perl Parser for NCBI Entrez
-Gene genome databases (L<http://www.ncbi.nih.gov/entrez/query.fcgi?db=gene>).  It
-parses an ASN.1-formatted Entrez Gene record and returns a data structure that
-contains all data items from the gene record.
+Bio::ASN1::Sequence is a regular expression-based Perl Parser for ASN.1-formatted
+NCBI sequences.  It parses an ASN.1-formatted sequence record and returns a data 
+structure that contains all data items from the sequence record.
 
 The parser will report error & line number if input data does not conform to the
-NCBI Entrez Gene genome annotation file format.
+NCBI Sequence annotation file format.
 
-Note that it is possible to provide reading of all NCBI's ASN.1-formatted
+The sequence parser is basically a modified version of the high-performance
+Bio::ASN1::EntrezGene parser.  However, I created a standalone module for sequence
+since it is more efficient to keep Sequence-specific code out of EntrezGene.pm.
+
+In fact it is possible to provide reading of all NCBI's ASN.1-formatted
 files through simple variations of the Entrez Gene parser (I need more
-investigation to be sure, but at least the sequence parser is a very simple
-variation on Entrez Gene parser and works well).
+investigation to be sure, but at least the sequence parser works well).
 
-It took the parser version 1.0 11 minutes to parse the human genome Entrez Gene
-file on one 2.4 GHz Intel Xeon processor.  The addition of validation and error
-reporting in 1.03 and handling of new Entrez Gene format slowed the parser down
-about 40%.
-
-Since V1.07, this package also included an indexer that runs pretty fast (it 
-takes 21 seconds for the indexer to index the human genome on the same 
-processor).  Therefore the combination of the modules would allow user to 
-retrieve and parse arbitrary records.
+Since demand for parsing NCBI ASN.1-formatted sequences is much lower than EntrezGene,
+this module is more like a beta version that works on the examples I checked, but
+I did not check all available records or data definitions.  The error-reporting
+function of this module has to be useful sometimes. :)
 
 =head1 SEE ALSO
 
-The parse_entrez_gene_example.pl script included in this package (please 
-see the Bio-ASN1-EntrezGene-x.xx/examples directory) is a very
-important and near-complete demo on using this module to extract all data
-items from Entrez Gene records.  Do check it out because in fact, this 
-script took me about 3-4 times more time to make for my project than the 
-parser V1.0 itself. Note that the example script was edited to leave
-out stuff specific to my internal project.
+The parse_sequence_example.pl script included in this package (please
+see the Bio-ASN1-EntrezGene-x.xx/examples directory) shows the usage.
 
-For details on various parsers I generated for Entrez Gene, example scripts that 
-uses/benchmarks the modules, please see L<http://sourceforge.net/projects/egparser/>.
-Those other parsers etc. are included in V1.05 download.
+Please check out perldoc for Bio::ASN1::EntrezGene for more info.
 
 =head1 AUTHOR
 
@@ -83,11 +69,11 @@ Dr. Mingyi Liu <mingyi.liu@gpc-biotech.com>
 
 =head1 COPYRIGHT
 
-The Bio::ASN1::EntrezGene module and its related modules and scripts 
-are copyright (c) 2005 Mingyi Liu, GPC Biotech AG and Altana Research 
-Institute. All rights reserved. I created these modules when working 
-on a collaboration project between these two companies. Therefore a 
-special thanks for the two companies to allow the release of the code 
+The Bio::ASN1::EntrezGene module and its related modules and scripts
+are copyright (c) 2005 Mingyi Liu, GPC Biotech AG and Altana Research
+Institute. All rights reserved. I created these modules when working
+on a collaboration project between these two companies. Therefore a
+special thanks for the two companies to allow the release of the code
 into public domain.
 
 You may use and distribute them under the terms of the Perl itself or
@@ -101,7 +87,7 @@ Any OS that Perl runs on.
 
 =cut
 
-package Bio::ASN1::EntrezGene;
+package Bio::ASN1::Sequence;
 
 use strict;
 use Carp qw(carp croak);
@@ -113,11 +99,11 @@ $VERSION = '1.09';
 
   Parameters: maxerrstr => 20 (optional) - maximum number of characters after
                 offending element, used by error reporting, default is 20
-              file or -file => $filename (optional) - name of the file to be 
+              file or -file => $filename (optional) - name of the file to be
                 parsed. call next_seq to parse!
-              fh or -fh => $filehandle (optional) - handle of the file to be 
-                parsed. 
-  Example:    my $parser = Bio::ASN1::EntrezGene->new();
+              fh or -fh => $filehandle (optional) - handle of the file to be
+                parsed.
+  Example:    my $parser = Bio::ASN1::Sequence->new();
   Function:   Instantiate a parser object
   Returns:    Object reference
   Notes:      Setting file or fh will reset line numbers etc. that are used
@@ -158,7 +144,7 @@ sub maxerrstr
 
 =head2 parse
 
-  Parameters: $string that contains Entrez Gene record,
+  Parameters: $string that contains Sequence record,
               $trimopt (optional) that specifies how the data structure
                 returned should be trimmed. 2 is recommended and 
                 default
@@ -169,13 +155,13 @@ sub maxerrstr
   Example:    my $value = $parser->parse($text); # DEPRECATED as
                 # external function!!! Do not call this function
                 # directly!  Call next_seq() instead
-  Function:   Takes in a string representing Entrez Gene record, parses
+  Function:   Takes in a string representing Sequence record, parses
                 the record and returns a data structure.
-  Returns:    A data structure containing all data items from the Entrez
-                Gene record.
+  Returns:    A data structure containing all data items from the sequence
+                record.
   Notes:      DEPRECATED as external function!!! Do not call this function
                 directly!  Call next_seq() instead
-              $string should not contain 'EntrezGene ::=' at beginning!
+              $string should not contain 'Seq-entry ::= set' at beginning!
 
 =cut
 
@@ -209,9 +195,9 @@ sub parse
 
 =head2 input_file
 
-  Parameters: $filename for file that contains Entrez Gene record(s)
+  Parameters: $filename for file that contains Sequence record(s)
   Example:    $parser->input_file($filename);
-  Function:   Takes in name of a file containing Entrez Gene records.
+  Function:   Takes in name of a file containing Sequence records.
               opens the file and stores file handle
   Returns:    none.
   Notes:      Attemps to open file larger than 2 GB even on Perl that
@@ -242,8 +228,8 @@ sub input_file
   Example:    my $value = $parser->next_seq();
   Function:   Use the file handle generated by input_file, parses the next
                 the record and returns a data structure.
-  Returns:    A data structure containing all data items from the Entrez
-                Gene record.
+  Returns:    A data structure containing all data items from the sequence
+                record.
   Notes:      Must pass in a filename through new() or input_file() first!
               For details on how to use the $trimopt data trimming option
                 please see comment for the trimdata method. An option
@@ -260,12 +246,12 @@ sub next_seq
 {
   my ($self, $compact) = @_;
   $self->{fh} || croak "you must pass in a file name or handle through new() or input_file() first before calling next_seq!\n";
-  local $/ = "Entrezgene ::= {"; # set record separator
+  local $/ = "Seq-entry ::= set {"; # set record separator
   while($_ = readline($self->{fh}))
   {
     chomp;
     next unless /\S/;
-    my $tmp = (/^\s*Entrezgene ::= ({.*)/si)? $1 : "{" . $_; # get rid of the 'Entrezgene ::= ' at the beginning of Entrez Gene record
+    my $tmp = (/^\s*Seq-entry ::= set ({.*)/si)? $1 : "{" . $_; # get rid of the 'Seq-entry ::= set ' at the beginning of Sequence record
     return $self->parse($tmp, $compact, 1); # 1 species no resetting line number
   }
 }
@@ -303,9 +289,10 @@ sub _parse
       # we're prepared for NCBI to make the format even worse:
       # note: to count line numbers right for text files on different OS, I'm sacrificing much speed (maybe I shouldn't worry so much)
       $self->{linenumber} += $lines =~ s/\n//g || $lines =~ s/\r//g; # count by *NIX/Win or Mac
-      my $tmp;
+      my ($tmp, $tmp1);
       # we put \s* in lookahead for linenumber counting purpose (which slows things down)
       if(($self->{input} =~ /\G"((?:[^"]|"")*)"(?=\s*[,}])/cg && ++$tmp) ||
+         ($self->{input} =~ /\G'([^']+)'\s*H/icg && ++$tmp1) || # this is the only difference b/w sequence and entrez gene formats so far
          $self->{input} =~ /\G([\w-]+)(?=\s*[,}])/cg)
       {
         my $value = $1;
@@ -314,6 +301,12 @@ sub _parse
           $value =~ s/""/"/g;
           $self->{linenumber} += $value =~ s/\n//g || $value =~ s/\r//g; # count by *NIX/Win or Mac
           $value =~ s/[\r\n]+//g; # in case it's Win format
+        }
+        elsif($tmp1) # slight speed optimization, not really necessary since regex is fast enough
+        {
+          $value =~ tr/fF8421/NNTGCA/; # good for NCBI4na.  But if NCBI8na was used, then more needs to be transliterated
+          $self->{linenumber} += $value =~ s/\n//g || $value =~ s/\r//g; # count by *NIX/Win or Mac
+          $value =~ s/[\r\n0]+//g; # in case it's Win format (get rid of '0' at end of seq too)
         }
         if(ref($data->{$id})) { push(@{$data->{$id}}, $value) } # hash value is not a terminal (or have multiple values), create array to avoid multiple same-keyed hash overwrite each other
         elsif($data->{$id}) { $data->{$id} = [$data->{$id}, $value] } # hash value has a second terminal value now!
@@ -429,12 +422,14 @@ sub _parse
               the optional flag.
   Returns:    none - trimming happenes in-place
   Notes:      This function is useful to compact a data structure produced by
-                Bio::ASN1::EntrezGene::parse.
+                Bio::ASN1::Sequence::parse.
               The acceptable values for $trimopt include:
                 1 - trim as much as possibile
                 2 (or 0, undef) - trim to an easy-to-use structure
                 3 - no trimming (in version 1.06, prior to version
                     1.06, 0 or undef means no trimming)
+              This function is duplicate to EntrezGene.pm's and code should
+                be compressed in the future (using util module & subclass).
 
 =cut
 
@@ -505,8 +500,8 @@ sub fh
 
   Parameters: none
   Example:    my $data = $parser->rawdata();
-  Function:   Get the entrez gene data file that was just parsed
-  Returns:    a string containing the ASN1-formatted Entrez Gene record
+  Function:   Get the sequence data file that was just parsed
+  Returns:    a string containing the ASN1-formatted sequence record
   Notes:      Must first parse a record then call this function!
               Could be useful in interpreting line number value in error
                 report (if user did a seek on file handle right before parsing 
@@ -517,7 +512,7 @@ sub fh
 sub rawdata
 {
   my $self = shift;
-  return "Entrezgene ::= $self->{input}";
+  return "Seq-entry ::= set $self->{input}";
 }
 
 1;
