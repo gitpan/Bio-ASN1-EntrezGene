@@ -23,6 +23,8 @@
 #         be extracted using this script.
 # Copyright: (c) 2005, Mingyi Liu, GPC Biotech, Altana Research Institute.
 # License: this code is licensed under Perl itself or GPL.
+# Citation: Liu, M and Grigoriev, A (2005) "Fast Parsers for Entrez Gene"
+#           Bioinformatics. In press
 ################################################################################
 
 use strict;

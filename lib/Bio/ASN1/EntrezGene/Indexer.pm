@@ -65,6 +65,11 @@ into public domain.
 You may use and distribute them under the terms of the Perl itself or
 GPL (L<http://www.gnu.org/copyleft/gpl.html>).
 
+=head1 CITATION
+
+Liu, M and Grigoriev, A (2005) "Fast Parsers for Entrez Gene" 
+Bioinformatics. In press
+
 =head1 OPERATION SYSTEMS SUPPORTED
 
 Any OS that Perl & Bioperl run on.
