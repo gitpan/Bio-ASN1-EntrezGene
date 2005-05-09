@@ -1,0 +1,5 @@
+Please note that Bio::ASN1::EntrezGene package version 1.091 is exactly the
+same as version 1.09 (the only difference being that this file only exists
+in version 1.091).  The reason for releasing a version 1.091 is that CPAN
+indexing of Bio::ASN1::EntrezGene version 1.09 had some problem that is not
+yet fixed & I'd have to upload a package with different file name.
