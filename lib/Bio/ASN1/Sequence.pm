@@ -98,7 +98,7 @@ use strict;
 use Carp qw(carp croak);
 use vars qw ($VERSION);
 
-$VERSION = '1.09';
+$VERSION = '1.10';
 
 =head2 new
 
@@ -296,7 +296,7 @@ sub _parse
       $self->{linenumber} += $lines =~ s/\n//g || $lines =~ s/\r//g; # count by *NIX/Win or Mac
       my ($tmp, $tmp1);
       # we put \s* in lookahead for linenumber counting purpose (which slows things down)
-      if(($self->{input} =~ /\G"((?:[^"]|"")*)"(?=\s*[,}])/cg && ++$tmp) ||
+      if(($self->{input} =~ /\G"((?:[^"]+|"")*)"(?=\s*[,}])/cg && ++$tmp) ||
          ($self->{input} =~ /\G'([^']+)'\s*H/icg && ++$tmp1) || # this is the only difference b/w sequence and entrez gene formats so far
          $self->{input} =~ /\G([\w-]+)(?=\s*[,}])/cg)
       {
@@ -337,7 +337,7 @@ sub _parse
         return $data;
       }
     }
-    elsif($self->{input} =~ /\G[ \t]*"((?:[^"]|"")*)"(?=\s*[,}])/cg)
+    elsif($self->{input} =~ /\G[ \t]*"((?:[^"]+|"")*)"(?=\s*[,}])/cg)
     {
       my $value = $1;
       $value =~ s/""/"/g;

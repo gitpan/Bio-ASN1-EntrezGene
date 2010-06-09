@@ -1,3 +1,11 @@
+version 1.10: Important update if you see segmentation fault when running the
+              parser - so far I only saw it happen on Perl 5.8 (Perl 5.10 is 
+              fine) due to an exceedingly long (and invalid) URL in one 
+              Arabidopsis entry. It's due to Perl regex engine core dumps when
+              matching the long string exhausted the stack. I changed the 
+              particular regex in EntrezGene.pm and Sequence.pm to solve the 
+              issue. The overall parsing runs 2-3% faster after the change.
+
 version 1.09: Added parser/indexer for NCBI's ASN.1-formatted
                 sequence files (like Genbank records).
               Updated test, example scripts and documentation
