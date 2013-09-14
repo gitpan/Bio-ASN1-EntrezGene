@@ -1,0 +1,273 @@
+{
+   "abstract" : "Regular expression-based Perl Parser for NCBI Entrez Gene.",
+   "author" : [
+      "Mingyi Liu <mingyiliu@gmail.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300037, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Bio-ASN1-EntrezGene",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Pod::Coverage::TrustPod" : "0",
+            "Test::Pod" : "1.41",
+            "Test::Pod::Coverage" : "1.08"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Bio::Index::AbstractSeq" : "0",
+            "Carp" : "0",
+            "parent" : "0",
+            "strict" : "0",
+            "utf8" : "0",
+            "warnings" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "File::Spec" : "0",
+            "IO::Handle" : "0",
+            "IPC::Open3" : "0",
+            "Test::More" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "mailto" : "bioperl-l@bioperl.org",
+         "web" : "https://redmine.open-bio.org/projects/bioperl/"
+      },
+      "homepage" : "http://search.cpan.org/dist/Bio-ASN1-EntrezGene",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/bioperl/bio-asn1-entrezgene.git",
+         "web" : "https://github.com/bioperl/bio-asn1-entrezgene"
+      }
+   },
+   "version" : "1.70",
+   "x_Dist_Zilla" : {
+      "perl" : {
+         "version" : "5.018001"
+      },
+      "plugins" : [
+         {
+            "class" : "Dist::Zilla::Plugin::GatherDir",
+            "name" : "@BioPerl/@Filter/GatherDir",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PruneCruft",
+            "name" : "@BioPerl/@Filter/PruneCruft",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ManifestSkip",
+            "name" : "@BioPerl/@Filter/ManifestSkip",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MetaYAML",
+            "name" : "@BioPerl/@Filter/MetaYAML",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::License",
+            "name" : "@BioPerl/@Filter/License",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ExtraTests",
+            "name" : "@BioPerl/@Filter/ExtraTests",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ExecDir",
+            "name" : "@BioPerl/@Filter/ExecDir",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ShareDir",
+            "name" : "@BioPerl/@Filter/ShareDir",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MakeMaker",
+            "name" : "@BioPerl/@Filter/MakeMaker",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Manifest",
+            "name" : "@BioPerl/@Filter/Manifest",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::TestRelease",
+            "name" : "@BioPerl/@Filter/TestRelease",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ConfirmRelease",
+            "name" : "@BioPerl/@Filter/ConfirmRelease",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::UploadToCPAN",
+            "name" : "@BioPerl/@Filter/UploadToCPAN",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MetaConfig",
+            "name" : "@BioPerl/MetaConfig",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MetaJSON",
+            "name" : "@BioPerl/MetaJSON",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PkgVersion",
+            "name" : "@BioPerl/PkgVersion",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PodSyntaxTests",
+            "name" : "@BioPerl/PodSyntaxTests",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::NoTabsTests",
+            "name" : "@BioPerl/NoTabsTests",
+            "version" : "0.01"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::NextRelease",
+            "name" : "@BioPerl/NextRelease",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Test::Compile",
+            "config" : {
+               "Dist::Zilla::Plugin::Test::Compile" : {
+                  "module_finder" : [
+                     ":InstallModules"
+                  ],
+                  "script_finder" : [
+                     ":ExecFiles"
+                  ]
+               }
+            },
+            "name" : "@BioPerl/Test::Compile",
+            "version" : "2.027"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PodCoverageTests",
+            "name" : "@BioPerl/PodCoverageTests",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MojibakeTests",
+            "name" : "@BioPerl/MojibakeTests",
+            "version" : "0.5"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::AutoPrereqs",
+            "name" : "@BioPerl/AutoPrereqs",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::AutoMetaResources",
+            "name" : "@BioPerl/AutoMetaResources",
+            "version" : "1.20"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MetaResources",
+            "name" : "@BioPerl/MetaResources",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Authority",
+            "name" : "@BioPerl/Authority",
+            "version" : "1.006"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::EOLTests",
+            "name" : "@BioPerl/EOLTests",
+            "version" : "0.02"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PodWeaver",
+            "name" : "@BioPerl/PodWeaver",
+            "version" : "3.101642"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::Check",
+            "name" : "@BioPerl/Git::Check",
+            "version" : "2.014"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::Commit",
+            "name" : "@BioPerl/Git::Commit",
+            "version" : "2.014"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::Tag",
+            "name" : "@BioPerl/Git::Tag",
+            "version" : "2.014"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":InstallModules",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":IncModules",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":TestFiles",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":ExecFiles",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":ShareFiles",
+            "version" : "4.300037"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":MainModule",
+            "version" : "4.300037"
+         }
+      ],
+      "zilla" : {
+         "class" : "Dist::Zilla::Dist::Builder",
+         "config" : {
+            "is_trial" : "0"
+         },
+         "version" : "4.300037"
+      }
+   },
+   "x_authority" : "cpan:BIOPERLML"
+}
+

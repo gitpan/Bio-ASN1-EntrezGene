@@ -1,5 +1,7 @@
 #!/usr/bin/env perl -w
 use strict;
+use warnings;
+use File::Spec;
 use Test::More tests => 10;
 
 my ($nogene, $noseq);
@@ -12,7 +14,7 @@ BEGIN {
 diag("\n\nFirst testing gene parser:\n");
 if(!$nogene)
 {
-  my $parser = Bio::ASN1::EntrezGene->new(file => 't/input.asn');
+  my $parser = Bio::ASN1::EntrezGene->new(file => File::Spec->catfile('t','input.asn'));
   isa_ok($parser, 'Bio::ASN1::EntrezGene');
   my $value = $parser->next_seq;
   isa_ok($value, 'ARRAY');
@@ -27,7 +29,7 @@ else
 diag("\n\nNow testing sequence parser:\n");
 if(!$noseq)
 {
-  my $parser = Bio::ASN1::Sequence->new(file => 't/seq.asn');
+  my $parser = Bio::ASN1::Sequence->new(file => File::Spec->catfile('t','seq.asn'));
   isa_ok($parser, 'Bio::ASN1::Sequence');
   my $value = $parser->next_seq;
   isa_ok($value, 'ARRAY');
